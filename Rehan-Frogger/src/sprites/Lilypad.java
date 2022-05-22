@@ -31,8 +31,5 @@ public class Lilypad extends Sprite{
         }
 
         super.draw(g2);
-        g2.setColor(Color.green);
-        g2.drawRect(getLocation().x, getLocation().y, getWidth(), getHeight());
-        g2.setColor(Color.black);
     }
 }

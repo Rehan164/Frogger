@@ -17,6 +17,8 @@ public class Frog extends Sprite {
 
     private boolean died, inWater;
 
+    private int lives;
+
     public Frog(BufferedImage image, Point location) {
         super(image, location);
         this.image = image;
@@ -25,6 +27,8 @@ public class Frog extends Sprite {
         h = image.getHeight();
 
         died = false;
+
+        lives = 3;
     }
 
     public void moveLeft() {
@@ -72,6 +76,7 @@ public class Frog extends Sprite {
             angle = 0;
             deathCounter += 4;
             if(deathCounter == 100) {
+                lives --;
                 died = false;
                 inWater = false;
                 setLocation(new Point(208, 448));
@@ -128,6 +133,14 @@ public class Frog extends Sprite {
     public void setDied(boolean died, boolean inWater) {
         this.died = died;
         this.inWater = inWater;
+    }
+
+    public void reset() {
+        setLocation(new Point(208, 448));
+    }
+
+    public int getLives() {
+        return lives;
     }
 
 }

@@ -43,9 +43,6 @@ public class Logs extends Sprite{
             g2.drawImage(Resources.logRight, getLocation().x + 96, getLocation().y, null);
         }
 
-        g2.setColor(Color.green);
-        g2.drawRect(getLocation().x, getLocation().y, getWidth(), getHeight());
-        g2.setColor(Color.black);
 
     }
 

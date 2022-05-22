@@ -24,6 +24,10 @@ public class Resources {
 
     public static BufferedImage background;
 
+    public static BufferedImage empty, finisher;
+
+    public static BufferedImage lives;
+
     public static BufferedImage normFrog1, normFrog2, normFrog3;
     public static BufferedImage lilypad1, lilypad2, lilypad3;
 
@@ -35,6 +39,8 @@ public class Resources {
             normFrog1 = frogger1.getSubimage(0, 0, 32, 32);   
             normFrog2 = frogger1.getSubimage(32, 0, 32, 32);
             normFrog3 = frogger1.getSubimage(64, 0, 32, 32);
+
+            lives = background.getSubimage(2, 482, 14, 14);
 
             background = background.getSubimage(0, 48, 448, 432);
 
@@ -60,6 +66,10 @@ public class Resources {
             lilypad1 = frogger1.getSubimage(0, 160, 32, 32);
             lilypad2 = frogger1.getSubimage(32, 160, 32, 32);
             lilypad3 = frogger1.getSubimage(64, 160, 32, 32);
+
+            empty = frogger1.getSubimage(192, 224, 32, 32);
+            finisher = frogger1.getSubimage(96, 192, 32, 32);
+
 
         }catch(Exception e){e.printStackTrace();}
     }

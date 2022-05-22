@@ -23,10 +23,21 @@ public class FroggerMain extends JPanel {
 
     private ArrayList<Lilypad> lilypads1, lilypads2;
 
+    private ArrayList<Sprite> finishBoxes;
+    private ArrayList<Sprite> frogFinishers;
+
     private boolean onThingWater;
+    private boolean reachedFinishLine;
+    
+    private int score;
+
+    private int level;
 
     public FroggerMain(int w, int h){
         setSize(w, h);
+
+        score = 0;
+        level = 0;
 
         frog = new Frog(Resources.normFrog1, new Point(208, 448));
 
@@ -42,6 +53,9 @@ public class FroggerMain extends JPanel {
 
         lilypads1 = new ArrayList<>(); // 3
         lilypads2 = new ArrayList<>(); // 2
+
+        finishBoxes = new ArrayList<>();
+        frogFinishers = new ArrayList<>();
 
         cars1.add(new Car(Resources.car1, new Point(448, 416), 1));
         cars1.add(new Car(Resources.car1, new Point(610, 416), 1));
@@ -87,7 +101,14 @@ public class FroggerMain extends JPanel {
         lilypads2.add(new Lilypad(Resources.lilypad1, new Point(788, 128)));
         lilypads2.add(new Lilypad(Resources.lilypad1, new Point(820, 128)));
 
+        finishBoxes.add(new Sprite(Resources.empty, new Point(16, 64)));
+        finishBoxes.add(new Sprite(Resources.empty, new Point(112, 64)));
+        finishBoxes.add(new Sprite(Resources.empty, new Point(208, 64)));
+        finishBoxes.add(new Sprite(Resources.empty, new Point(304, 64)));
+        finishBoxes.add(new Sprite(Resources.empty, new Point(400, 64)));
+
         onThingWater = false;
+        reachedFinishLine = false;
 
         timer = new Timer(1000/60, e->update());
         timer.start();
@@ -98,61 +119,62 @@ public class FroggerMain extends JPanel {
     public void update(){
 
         for (Car car : cars1) {
-            car.move(1);
+            car.move(1 + level);
             if(frog.intersects(car)) {
                 frog.setDied(true, false);  
             }
         }
         for (Car car : cars2) {
-            car.move(1);
+            car.move(1 + level);
             if(frog.intersects(car)) {
                 frog.setDied(true, false);  
             }
         }
         for (Car car : cars3) {
-            car.move(2);
+            car.move(2 + level);
             if(frog.intersects(car)) {
                 frog.setDied(true, false);   
             }
         }
         for (Car car : cars4) {
-            car.move(3);
+            car.move(3 + level);
             if(frog.intersects(car)) {
                 frog.setDied(true, false);
             }
         }
         for (Car car : cars5) {
-            car.move(3);
+            car.move(3 + level);
             if(frog.intersects(car)) {
                 frog.setDied(true, false);  
             }
         }
 
         for (Logs log : logs1) {
-            log.move(1);
+            log.move(1 + level);
         }
 
         for (Logs log : logs2) {
-            log.move(2);
+            log.move(2 + level);
         }
 
         for (Logs log : logs3) {
-            log.move(1);
+            log.move(1 + level);
         }
 
         for (Lilypad pad : lilypads1) {
-            pad.move(1);
+            pad.move(1 + level);
         }
 
         for (Lilypad pad : lilypads2) {
-            pad.move(2);
+            pad.move(2 + level);
         }
 
-        if(frog.getY() < 244 && frog.getY() > 64) {
+        if(frog.getY() < 244 && frog.getY() > 32) {
             onThingWater = false;
+            reachedFinishLine = false;
             for (Lilypad pad : lilypads1) {
                 if(frog.intersects(pad)) {
-                    frog.move(-1, 0);
+                    frog.move(-(1 + level), 0);
                     onThingWater = true;
                     break;
                 }
@@ -161,7 +183,7 @@ public class FroggerMain extends JPanel {
             if(!onThingWater) {
                 for (Logs log : logs1) {
                     if(frog.intersects(log)) {
-                        frog.move(1, 0);
+                        frog.move(1 + level, 0);
                         onThingWater = true;
                         break;
                     }
@@ -171,7 +193,7 @@ public class FroggerMain extends JPanel {
             if(!onThingWater) {
                 for (Logs log : logs2) {
                     if(frog.intersects(log)) {
-                        frog.move(2, 0);
+                        frog.move(2 + level, 0);
                         onThingWater = true;
                         break;
                     }
@@ -181,7 +203,7 @@ public class FroggerMain extends JPanel {
             if(!onThingWater) {
                 for (Lilypad pad : lilypads2) {
                     if(frog.intersects(pad)) {
-                        frog.move(-2, 0);
+                        frog.move(-(2 +  + level), 0);
                         onThingWater = true;
                         break;
                     }
@@ -191,16 +213,39 @@ public class FroggerMain extends JPanel {
             if(!onThingWater) {
                 for (Logs log : logs3) {
                     if(frog.intersects(log)) {
-                        frog.move(1, 0);
+                        frog.move(1 + level, 0);
                         onThingWater = true;
                         break;
                     }
                 }
             }
 
-            if(!onThingWater) {
+            for (int i = 0; i < finishBoxes.size(); i++) {
+                if(frog.intersects(finishBoxes.get(i))) {
+                    reachedFinishLine = true;
+                    frogFinishers.add(new Sprite(Resources.finisher, new Point(finishBoxes.get(i).getX(), finishBoxes.get(i).getY())));
+                    finishBoxes.remove(i);
+                    score += 50;
+                    frog.reset();
+                    break;
+                }
+            }
+
+            if(!onThingWater && !reachedFinishLine) {
                 frog.setDied(true, true);
             }
+
+            if(frogFinishers.size() == 5) {
+                score += 200;
+                frogFinishers = new ArrayList<>();
+                level ++;
+                finishBoxes.add(new Sprite(Resources.empty, new Point(16, 64)));
+                finishBoxes.add(new Sprite(Resources.empty, new Point(112, 64)));
+                finishBoxes.add(new Sprite(Resources.empty, new Point(208, 64)));
+                finishBoxes.add(new Sprite(Resources.empty, new Point(304, 64)));
+                finishBoxes.add(new Sprite(Resources.empty, new Point(400, 64)));
+            }
+
         }
 
         repaint();
@@ -293,6 +338,14 @@ public class FroggerMain extends JPanel {
             if(pad.getX() < 0 - pad.getWidth()) {
                 pad.setLocation(new Point(448, 128));
             }
+        }
+
+        for (Sprite s : frogFinishers) {
+            s.draw(g2);
+        }
+
+        for (int i = 0; i < frog.getLives(); i++) {
+            g2.drawImage(Resources.lives, 5 + (18 * i), 482, null);
         }
 
         frog.draw(g2);
