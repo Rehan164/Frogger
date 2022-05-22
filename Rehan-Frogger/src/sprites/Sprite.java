@@ -25,7 +25,7 @@ public class Sprite {
 
     public boolean intersects(Sprite other){
         Rectangle hitBox = new Rectangle(location.x, location.y, image.getWidth(), image.getHeight());
-        Rectangle otherHitBox = new Rectangle(other.location.x, other.location.y, other.image.getWidth(), other.image.getHeight());
+        Rectangle otherHitBox = new Rectangle(other.location.x, other.location.y, other.getWidth(), other.getHeight());
         return hitBox.intersects(otherHitBox);
     }
 
@@ -39,6 +39,10 @@ public class Sprite {
     public int getHeight() {return image.getHeight();}
 
     public void setImage(BufferedImage image) { this.image = image; }
+
+    public Point getLocation() {
+        return location;
+    }
 
     public void setLocation(Point location) {
         this.location = location;

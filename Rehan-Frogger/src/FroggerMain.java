@@ -2,6 +2,8 @@ import javax.swing.*;
 
 import sprites.Car;
 import sprites.Frog;
+import sprites.Lilypad;
+import sprites.Logs;
 import sprites.Resources;
 import sprites.Sprite;
 
@@ -17,6 +19,11 @@ public class FroggerMain extends JPanel {
     private Frog frog;
 
     private ArrayList<Car> cars1, cars2, cars3, cars4, cars5;
+    private ArrayList<Logs> logs1, logs2, logs3;
+
+    private ArrayList<Lilypad> lilypads1, lilypads2;
+
+    private boolean onThingWater;
 
     public FroggerMain(int w, int h){
         setSize(w, h);
@@ -28,6 +35,13 @@ public class FroggerMain extends JPanel {
         cars3 = new ArrayList<>();
         cars4 = new ArrayList<>();
         cars5 = new ArrayList<>();
+
+        logs1 = new ArrayList<>(); // 2
+        logs2 = new ArrayList<>(); // 4
+        logs3 = new ArrayList<>(); // 3
+
+        lilypads1 = new ArrayList<>(); // 3
+        lilypads2 = new ArrayList<>(); // 2
 
         cars1.add(new Car(Resources.car1, new Point(448, 416), 1));
         cars1.add(new Car(Resources.car1, new Point(610, 416), 1));
@@ -44,6 +58,36 @@ public class FroggerMain extends JPanel {
 
         cars5.add(new Car(Resources.truck, new Point(448, 288), 5));
         cars5.add(new Car(Resources.truck, new Point(722, 288), 5));
+
+        logs1.add(new Logs(Resources.logLeft, new Point(-64,192), 2));
+        logs1.add(new Logs(Resources.logLeft, new Point(-256,192), 2));
+        logs1.add(new Logs(Resources.logLeft, new Point(-448,192), 2));
+
+        logs2.add(new Logs(Resources.logLeft, new Point(-128,160), 4));
+        logs2.add(new Logs(Resources.logLeft, new Point(-400,160), 4));
+
+        logs3.add(new Logs(Resources.logLeft, new Point(-100,96), 3));
+        logs3.add(new Logs(Resources.logLeft, new Point(-300,96), 3));
+        logs3.add(new Logs(Resources.logLeft, new Point(-500,96), 3));
+
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(448, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(480, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(512, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(602, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(634, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(666, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(756, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(788, 224)));
+        lilypads1.add(new Lilypad(Resources.lilypad1, new Point(820, 224)));
+
+        lilypads2.add(new Lilypad(Resources.lilypad1, new Point(448, 128)));
+        lilypads2.add(new Lilypad(Resources.lilypad1, new Point(480, 128)));
+        lilypads2.add(new Lilypad(Resources.lilypad1, new Point(634, 128)));
+        lilypads2.add(new Lilypad(Resources.lilypad1, new Point(666, 128)));
+        lilypads2.add(new Lilypad(Resources.lilypad1, new Point(788, 128)));
+        lilypads2.add(new Lilypad(Resources.lilypad1, new Point(820, 128)));
+
+        onThingWater = false;
 
         timer = new Timer(1000/60, e->update());
         timer.start();
@@ -74,7 +118,7 @@ public class FroggerMain extends JPanel {
         for (Car car : cars4) {
             car.move(3);
             if(frog.intersects(car)) {
-                frog.setDied(true, false);  
+                frog.setDied(true, false);
             }
         }
         for (Car car : cars5) {
@@ -84,10 +128,80 @@ public class FroggerMain extends JPanel {
             }
         }
 
-        if(frog.getY() < 244 && frog.getY() > 96) {
-            frog.setDied(true, true);
+        for (Logs log : logs1) {
+            log.move(1);
         }
 
+        for (Logs log : logs2) {
+            log.move(2);
+        }
+
+        for (Logs log : logs3) {
+            log.move(1);
+        }
+
+        for (Lilypad pad : lilypads1) {
+            pad.move(1);
+        }
+
+        for (Lilypad pad : lilypads2) {
+            pad.move(2);
+        }
+
+        if(frog.getY() < 244 && frog.getY() > 64) {
+            onThingWater = false;
+            for (Lilypad pad : lilypads1) {
+                if(frog.intersects(pad)) {
+                    frog.move(-1, 0);
+                    onThingWater = true;
+                    break;
+                }
+            }
+
+            if(!onThingWater) {
+                for (Logs log : logs1) {
+                    if(frog.intersects(log)) {
+                        frog.move(1, 0);
+                        onThingWater = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!onThingWater) {
+                for (Logs log : logs2) {
+                    if(frog.intersects(log)) {
+                        frog.move(2, 0);
+                        onThingWater = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!onThingWater) {
+                for (Lilypad pad : lilypads2) {
+                    if(frog.intersects(pad)) {
+                        frog.move(-2, 0);
+                        onThingWater = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!onThingWater) {
+                for (Logs log : logs3) {
+                    if(frog.intersects(log)) {
+                        frog.move(1, 0);
+                        onThingWater = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!onThingWater) {
+                frog.setDied(true, true);
+            }
+        }
 
         repaint();
     }
@@ -141,6 +255,43 @@ public class FroggerMain extends JPanel {
 
             if(car.getX() < 0 - car.getWidth()) {
                 car.setLocation(new Point(448, 288));
+            }
+        }
+
+        for (Logs log : logs1) {
+            log.draw(g2);
+
+            if(log.getX() > 488) {
+                log.setLocation(new Point(-64, 192));
+            }
+        }
+
+        for (Logs log : logs2) {
+            log.draw(g2);
+
+            if(log.getX() > 488) {
+                log.setLocation(new Point(-160, 160));
+            }
+        }
+        for (Logs log : logs3) {
+            log.draw(g2);
+
+            if(log.getX() > 488) {
+                log.setLocation(new Point(-100, 96));
+            }
+        }
+
+        for (Lilypad pad : lilypads1) {
+            pad.draw(g2);
+            if(pad.getX() < 0 - pad.getWidth()) {
+                pad.setLocation(new Point(448, 224));
+            }
+        }
+
+        for (Lilypad pad : lilypads2) {
+            pad.draw(g2);
+            if(pad.getX() < 0 - pad.getWidth()) {
+                pad.setLocation(new Point(448, 128));
             }
         }
 

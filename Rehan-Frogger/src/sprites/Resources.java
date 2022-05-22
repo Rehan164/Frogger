@@ -17,6 +17,7 @@ public class Resources {
 
 
     public static BufferedImage car1, car2, car3, car4, truck;
+    public static BufferedImage logLeft, logRight, logCenter;
     public static BufferedImage squish1, squish2, squish3, death, drown1, drown2, drown3;
 
     public static BufferedImage frogger1;
@@ -24,6 +25,7 @@ public class Resources {
     public static BufferedImage background;
 
     public static BufferedImage normFrog1, normFrog2, normFrog3;
+    public static BufferedImage lilypad1, lilypad2, lilypad3;
 
     static{
         try{
@@ -51,7 +53,13 @@ public class Resources {
             drown2 = frogger1.getSubimage(64, 96, 32, 32);
             drown3 = frogger1.getSubimage(96, 96, 32, 32);
 
+            logLeft = frogger1.getSubimage(192, 256, 32, 32);
+            logCenter = frogger1.getSubimage(224, 256, 32, 32);
+            logRight = frogger1.getSubimage(256, 256, 32, 32);
 
+            lilypad1 = frogger1.getSubimage(0, 160, 32, 32);
+            lilypad2 = frogger1.getSubimage(32, 160, 32, 32);
+            lilypad3 = frogger1.getSubimage(64, 160, 32, 32);
 
         }catch(Exception e){e.printStackTrace();}
     }
