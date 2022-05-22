@@ -39,6 +39,10 @@ public class Sprite {
     public int getHeight() {return image.getHeight();}
 
     public void setImage(BufferedImage image) { this.image = image; }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
 }
 
 
