@@ -105,9 +105,13 @@ public class Frog extends Sprite {
             if(deathCounter == 20) {
                 if(inWater) {
                     setImage(Resources.drown1);
+                    Resources.plunk.setMicrosecondPosition(0);
+                    Resources.plunk.start();
                 }
                 else {
                     setImage(Resources.squish1);
+                    Resources.squash.setMicrosecondPosition(0);
+                    Resources.squash.start();
                 }
             }
         }

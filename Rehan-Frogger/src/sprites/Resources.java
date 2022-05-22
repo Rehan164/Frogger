@@ -1,9 +1,16 @@
 package sprites;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +37,8 @@ public class Resources {
 
     public static BufferedImage normFrog1, normFrog2, normFrog3;
     public static BufferedImage lilypad1, lilypad2, lilypad3;
+
+    public static Clip jump, squash, plunk;
 
     static{
         try{
@@ -70,6 +79,21 @@ public class Resources {
             empty = frogger1.getSubimage(192, 224, 32, 32);
             finisher = frogger1.getSubimage(96, 192, 32, 32);
 
+            File j = new File("./res/hop.wav");
+            AudioInputStream audioStreamj = AudioSystem.getAudioInputStream(j);
+            jump = AudioSystem.getClip();
+            jump.open(audioStreamj);
+
+            File p = new File("./res/plunk.wav");
+            AudioInputStream audioStreamp = AudioSystem.getAudioInputStream(p);
+            plunk = AudioSystem.getClip();
+            plunk.open(audioStreamp);
+
+            File s = new File("./res/squash.wav");
+            AudioInputStream audioStreams = AudioSystem.getAudioInputStream(s);
+            squash = AudioSystem.getClip();
+            squash.open(audioStreams);
+            
 
         }catch(Exception e){e.printStackTrace();}
     }
