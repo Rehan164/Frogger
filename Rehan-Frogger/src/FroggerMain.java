@@ -425,6 +425,20 @@ public class FroggerMain extends JPanel {
                 // if you want to use arrows:
                 // if(e.getKeyCode() == KeyEvent.VK_UP)a
                 //      frog.moveUp();
+
+                if(e.getKeyCode() == KeyEvent.VK_UP && frog.getY() > 64 && !frog.getDied()) {
+                    frog.moveUp();
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN && frog.getY() < 448 && !frog.getDied()) {
+                    frog.moveDown();
+                }
+                if(e.getKeyCode() == KeyEvent.VK_LEFT && frog.getX() > 0 && !frog.getDied()) {
+                    frog.moveLeft();
+                }
+                if(e.getKeyCode() == KeyEvent.VK_RIGHT && frog.getX() < getWidth() - frog.getWidth() && !frog.getDied()) {
+                    frog.moveRight();
+                }
+
             }
             @Override
             public void keyReleased(KeyEvent e) { }
