@@ -10,9 +10,13 @@ import sprites.Sprite;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FroggerMain extends JPanel {
 
@@ -38,6 +42,8 @@ public class FroggerMain extends JPanel {
     private boolean gameOver;
 
     public static Font arcadeFont;
+
+    public int highestScore;
 
     public FroggerMain(int w, int h){
         setSize(w, h);
@@ -116,6 +122,9 @@ public class FroggerMain extends JPanel {
         onThingWater = false;
         reachedFinishLine = false;
         gameOver = false;
+
+        reading();
+        System.out.println(highestScore);
 
         timer = new Timer(1000/60, e->update());
         timer.start();
@@ -259,6 +268,8 @@ public class FroggerMain extends JPanel {
             gameOver = true;
         }
 
+
+
         repaint();
     }
 
@@ -366,6 +377,9 @@ public class FroggerMain extends JPanel {
             g2.setColor(Color.WHITE);
             g2.setFont(new Font(Font.SERIF, Font.BOLD, 40));
             g2.drawString("Score - " + Integer.toString(score), 10, 38);
+
+            g2.setFont(new Font(Font.SERIF, Font.BOLD, 20));
+            g2.drawString("Hi-Score - " + Integer.toString(highestScore), 270, 507);
         }
 
         if(gameOver) {
@@ -376,6 +390,8 @@ public class FroggerMain extends JPanel {
             g2.setColor(Color.WHITE);
             g2.setFont(new Font(Font.SERIF, Font.BOLD, 25));
             g2.drawString(" Your Score was - " + Integer.toString(score), 75, 130);
+
+            writing();
         }
 
 
@@ -507,4 +523,34 @@ public class FroggerMain extends JPanel {
         reachedFinishLine = false;
         gameOver = false;
     }
+
+    public void writing() {
+        if(highestScore < score) {
+            highestScore = score;
+            try {
+                FileWriter myWriter = new FileWriter("./res/data.txt");
+                BufferedWriter bw = new BufferedWriter(myWriter);
+                bw.write(Integer.toString(highestScore));
+                bw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void reading() {
+        try {
+            File file = new File("./res/data.txt");
+            Scanner myReader = new Scanner(file);
+            while(myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                highestScore = Integer.parseInt(data);
+            }
+            myReader.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
